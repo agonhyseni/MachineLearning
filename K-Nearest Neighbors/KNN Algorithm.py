@@ -1,5 +1,5 @@
+import operator
 import math
-import operator 
 class KNN:
     k = 0
     trainX = []
@@ -8,20 +8,20 @@ class KNN:
     testY = []
     predikimetY = []
     
-    def __init__(self,k):
+    def __init__(self,k=3):
         self.k = k
         
-    def distancaEuklidit(instanca1,instanca2,gjatesia):
+    def distancaEuklidit(self,instanca1,instanca2,gjatesia):
         distanca = 0
         for i in range(gjatesia):
             distanca += pow((instanca1[i]-instanca2[i]),2)
         return math.sqrt(distanca)
 
-    def merrFqinjet(_teDhenatTrajnueseX,_teDhenatTrajnueseY,_teDhenatPredikueseX,_k):
+    def merrFqinjet(self,_teDhenatTrajnueseX,_teDhenatTrajnueseY,_teDhenatPredikueseX,_k):
         distancat = []
         gjatesia = len(_teDhenatPredikueseX)-1
         for i in range(len(_teDhenatTrajnueseX)):
-            dist = distancaEuklidit(_teDhenatPredikueseX, _teDhenatTrajnueseX[i],gjatesia)
+            dist = self.distancaEuklidit(_teDhenatPredikueseX, _teDhenatTrajnueseX[i],gjatesia)
             distancat.append((_teDhenatTrajnueseY[i],dist))
         distancat.sort(key=operator.itemgetter(1))
         fqinjet = []
@@ -29,15 +29,15 @@ class KNN:
             fqinjet.append(distancat[i][0])
         return fqinjet
 
-    def vleratUnike(lista):
+    def vleratUnike(self,lista):
         vleratUnike = []
         for i in range(len(lista)):
             if lista[i] not in vleratUnike:
                 vleratUnike.append(lista[i])
         return vleratUnike
 
-    def gjejKlasen(fqinjet):
-        vUnike = vleratUnike(fqinjet)
+    def gjejKlasen(self,fqinjet):
+        vUnike = self.vleratUnike(fqinjet)
         frekuentimi = []
         for i in range(len(vUnike)):
             count = 0
@@ -52,6 +52,7 @@ class KNN:
                 max = frekuentimi[i][1]
                 klasa = frekuentimi[i][0]
         return klasa
+    
     def trajnoAlgoritmin(self,X,Y):
         self.trainX = X.as_matrix()
         self.trainY = Y.as_matrix()
@@ -60,16 +61,15 @@ class KNN:
         self.testX = _teDhenatPredikueseX.as_matrix()
         teDhenatPredikueseY = []
         for i in range(len(self.testX)):
-            fqinjet = merrFqinjet(self.trainX,self.trainY,self.testX[i],self.k)
-            predikimiKlases = gjejKlasen(fqinjet)
+            fqinjet = self.merrFqinjet(self.trainX,self.trainY,self.testX[i],self.k)
+            predikimiKlases = self.gjejKlasen(fqinjet)
             teDhenatPredikueseY.append(predikimiKlases)
         self.predikimetY = teDhenatPredikueseY
-   
-   def predikimet(self):
+    def predikimet(self):
         return self.predikimetY
     
-    def saktesiaAlgoritmit(self,testY):
-        self.testY = testY
+    def saktesiaAlgoritmit(self,_testY):
+        self.testY = _testY.as_matrix()
         saktesia = 0
         for i in range(len(self.testY)):
             if self.testY[i] == self.predikimetY[i]:
