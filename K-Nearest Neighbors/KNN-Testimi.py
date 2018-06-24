@@ -1,16 +1,14 @@
 import pandas as pd
+from sklearn.cross_validation import train_test_split
+Data = pd.read_csv("DataFrame.csv")
 
-train = pd.read_csv("TeDhenatTrajnuese.csv")
-test = pd.read_csv("TeDhenatTestuese.csv")
+X = Data.drop('AQI Category',1)
+Y = Data['AQI Category']
 
-trainY = train['Klasa']
-trainX = train.drop('Klasa',1)
+X_train, X_test, Y_train, Y_test = train_test_split(X,Y,train_size=0.7,random_state=7)
 
-testY = test['Klasa']
-testX = test.drop('Klasa',1)
-
-objKNN = KNN(3)
-objKNN.trajnoAlgoritmin(trainX,trainY)
-objKNN.prediko(testX)
-objKNN.saktesiaAlgoritmit(testY)
-objKNN.predikimet()
+b = KNN(3)
+b.trajnoAlgoritmin(X_train,Y_train)
+b.prediko(X_test)
+b.predikimet()
+b.saktesiaAlgoritmit(Y_test)
