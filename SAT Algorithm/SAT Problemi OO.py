@@ -1,4 +1,3 @@
-import numpy as np
 #Definimi i funksioneve te nevojshme
 class SAT:
     formula = []
