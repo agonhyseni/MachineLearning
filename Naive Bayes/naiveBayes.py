@@ -6,6 +6,7 @@ Created on Thu Jun 14 09:53:01 2018
 """
 import pandas as pd
 import functools as funct
+import pprint 
 
 class naiveBayes():
     
@@ -24,7 +25,7 @@ class naiveBayes():
     P(E) : Propabiliteti(Evidenca)
     """
     
-    dataBaza = None;
+    dataBaza = None
     propabilitetiAtributitKlase = {}
     AtributiKlase = None
     """
@@ -64,10 +65,11 @@ class naiveBayes():
         """
         
         vlerat_klases = list(set(self.dataBaza[self.AtributiKlase]))
+        
         lista_klases = list(self.dataBaza[self.AtributiKlase])
         
         for i in vlerat_klases:
-            self.propabilitetiAtributitKlase[i] = lista_klases.count(i)/float(len(lista_klases))
+            self.propabilitetiAtributitKlase[i] = round((lista_klases.count(i)/float(len(lista_klases)))*100, 3)
         print("Vlerat e propabilitetit te atributit klase: \n", self.propabilitetiAtributitKlase, "\n")
         
     def gjej_propabilitetin_Atributeve(self, atributi, tipi_atributit, tipi_klases):
@@ -91,14 +93,15 @@ class naiveBayes():
                 i perket atributi per te cilin po kalkulojme propabilitetin
         """
         listo_Atributet_Individuale = list(self.dataBaza[atributi])
+        
         lista_klases = list(self.dataBaza[self.AtributiKlase])
         
         totaliAtributeve = 1
         
         for i in range(0, len(listo_Atributet_Individuale)):
-            if lista_klases[i] == tipi_klases and listo_Atributet_Individuale[i] == tipi_atributit:
+            if lista_klases[i] == str(tipi_klases) and str(listo_Atributet_Individuale[i]) == str(tipi_atributit):
                 totaliAtributeve += 1
-            return totaliAtributeve/float(lista_klases.count(tipi_klases))
+        return round(totaliAtributeve/float(lista_klases.count(tipi_klases)), 3)
     
     def Kalkulo_propabilitetin_kushtezues(self, hipoteza):
         """
@@ -115,9 +118,8 @@ class naiveBayes():
         for i in self.propabilitetiAtributitKlase:
             self.propabilitetiAtributeve[i] = {}
             for j in hipoteza:
-                self.propabilitetiAtributeve[i].update({ hipoteza[j]: self.gjej_propabilitetin_Atributeve(j, hipoteza[j], i) })
-        print("Kalkulimi i propabilitetit kushtezues:")
-        print(self.propabilitetiAtributeve, "\n")
+                self.propabilitetiAtributeve[i].update({ hipoteza[j]:self.gjej_propabilitetin_Atributeve(j, hipoteza[j], i) })                
+        pprint.pprint(self.propabilitetiAtributeve)
         
     def klasifiko(self):
         """
@@ -125,9 +127,7 @@ class naiveBayes():
         Kjo metode kthen klasen ne te cilen takon predikimi te cilin e ben algoritmi
         duke kthyer nje vlere te llogaritur te propabilitetit
         """
-        print("Rezultati: ")
+        print("\nRezultati: ")
         for i in self.propabilitetiAtributeve:
             print(i, " ==> ", 
-                  funct.reduce(lambda x, y: x*y, 
-                               self.propabilitetiAtributeve[i].values()) * self.propabilitetiAtributitKlase[i])
-        
+                  "{0:.8f}".format(funct.reduce(lambda x, y: x*y, self.propabilitetiAtributeve[i].values()) * self.propabilitetiAtributitKlase[i]))
