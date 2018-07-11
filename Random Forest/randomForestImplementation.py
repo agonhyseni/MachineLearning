@@ -7,9 +7,9 @@ import matplotlib.pyplot as plt
 nrOfFirstColumn = 2
 nrOfLastColumn = 8
 iterations = 5
-minSize = 20
+minSize = 200
 maxDepth = 8
-nFeatures = 3
+nFeatures = 2
 
 class Node:    
     def __init__(self, left, right, splitIndex, splitValue):
@@ -22,9 +22,7 @@ class Tree:
     def __init__(self):
         self.root = None
         
-    def processDataset(self, filename):
-        """Function from loading a dataset (location @filename). For specific dataset"""
-        
+    def processDataset(self, filename):        
         fileToOpen = open(filename, "r")
         self.dataset = list(csv.reader(fileToOpen))         
         self.dataset = [x[nrOfFirstColumn:nrOfLastColumn] for x in self.dataset[1:-1]]          
@@ -73,8 +71,7 @@ class Tree:
         
         bestLeft = bestRight = None
         bestGini, bestSplitIndex, bestSplitValue = 100, -1, -1  
-        
-#        
+      
         for index in features:
             for row in data:               
                 left, right = self.getSplit(index, row[index], data)               
@@ -164,19 +161,7 @@ class RandomForest:
             predictions.append(tree.predict(row))        
         
         data = Counter(predictions)
-        return data.most_common(1)[0][0]
-    
-    def processDataset(self, filename):
-        """Function from loading a dataset (location @filename). For specific dataset"""
-        
-        fileToOpen = open(filename, "r")
-        self.dataset = list(csv.reader(fileToOpen))       
-        self.dataset = [x[nrOfFirstColumn:nrOfLastColumn] for x in self.dataset[1:-1]]          
-       
-        for row in range(len(self.dataset)):
-            for column in range(len(self.dataset[0]) - 1):
-                self.dataset[row][column] = float(self.dataset[row][column].strip())
-            self.dataset[row][column + 1] = int(self.dataset[row][column + 1].strip())  
+        return data.most_common(1)[0][0] 
 
 def testForest(numTrees, minSize, maxDepth):
     forest = RandomForest("trainA.txt", minSize, maxDepth, numTrees)
@@ -220,18 +205,14 @@ for i in range(iterations):
         averageTimes[i] += (t1 - t0)
         print(str(numTrees) + " trees: Total time" + ": " + str(t1 - t0))
         print("_________________________________________________________")
-        
-        
-
+              
 print("Average percentages: ")
 for i, numTrees in enumerate((1, 5, 10, 50), start = 0):
     print(str(numTrees) + " trees: " + str(round(averages[i]/float(iterations),3)) + "%" )
     print("Average time: " + str(round(averageTimes[i]/float(iterations),3)) + " seconds")
-    
-for i in range(4):
     averagesFinal[i] = round(averages[i]/float(iterations),3)
     averageTimesFinal[i] = round(averageTimes[i]/float(iterations),3)
-    
+     
 print("\nDiagram shows the accuracy:")    
 plt.plot([1,5,10,50], averagesFinal)
 plt.ylabel('Percentage')
