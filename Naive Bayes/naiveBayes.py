@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Jun 14 09:53:01 2018
-
 @author: Sadri Shehu ssheh
 """
 import pandas as pd
@@ -13,9 +12,7 @@ class naiveBayes():
     """
     Naive Bayes eshte algoritem i cili bazohet ne frekuencen e ngjarjeve per te 
     predikuar nese nje ngjarje do te ndodhe ne te ardhmen.
-
     Ky algoritem bazohet ne formulen e propabiliteti e njohur si Teorema e Byesit
-
     Teorema e Bayesit:
         P(H|E) =  P(E/H)*P(H) / P(E)
         
@@ -69,7 +66,7 @@ class naiveBayes():
         lista_klases = list(self.dataBaza[self.AtributiKlase])
         
         for i in vlerat_klases:
-            self.propabilitetiAtributitKlase[i] = round((lista_klases.count(i)/float(len(lista_klases)))*100, 3)
+            self.propabilitetiAtributitKlase[i] = round((lista_klases.count(i)/float(len(lista_klases))), 3)
         print("Vlerat e propabilitetit te atributit klase: \n", self.propabilitetiAtributitKlase, "\n")
         
     def gjej_propabilitetin_Atributeve(self, atributi, tipi_atributit, tipi_klases):
@@ -111,6 +108,9 @@ class naiveBayes():
         me propabilitetin e atributit klase. 
         Permes kesaj metode kryhet predikimi i algoritmit
         
+        (Hipoteza|Evidenca) = P(Evidenca1|Hipoteza) x P(Evidenca2|Hipoteza) x ... x P(EvidenceN|Hipoteza) x P(Hipoteza)
+        ndarë për P(Evidencat)
+        
         Parametrat:
         -----------
             hipoteza : vektor{"Emri Atributit (1)" : "Vlera e atributit (1)" ... "Emri Atributit (n)" : "Vlera e atributit (n)"}
@@ -126,8 +126,17 @@ class naiveBayes():
         Metoda e cila kthen rezultatin e arritur nga algoritmi.
         Kjo metode kthen klasen ne te cilen takon predikimi te cilin e ben algoritmi
         duke kthyer nje vlere te llogaritur te propabilitetit
-        """
+        
         print("\nRezultati: ")
         for i in self.propabilitetiAtributeve:
             print(i, " ==> ", 
-                  "{0:.8f}".format(funct.reduce(lambda x, y: x*y, self.propabilitetiAtributeve[i].values()) * self.propabilitetiAtributitKlase[i]))
+                  "{0:.8f}".format(funct.reduce(lambda x, y: x*y, self.propabilitetiAtributeve[i].values())*self.propabilitetiAtributitKlase[i]))
+        """   
+        print("\nRezultati: ")
+        
+        for i in self.propabilitetiAtributeve:
+            VektoriVlerave = list(self.propabilitetiAtributeve[i].values())
+            VleratIndividuale = 0
+            for j in VektoriVlerave:
+                VleratIndividuale = VleratIndividuale + (j * self.propabilitetiAtributitKlase[i])*100
+            print(i, "==>", round(VleratIndividuale, 4))
