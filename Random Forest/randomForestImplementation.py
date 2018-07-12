@@ -7,9 +7,9 @@ import matplotlib.pyplot as plt
 nrOfFirstColumn = 2
 nrOfLastColumn = 8
 iterations = 5
-minSize = 200
-maxDepth = 8
-nFeatures = 2
+minSize = 500
+maxDepth = 4
+nFeatures = 3
 
 class Node:    
     def __init__(self, left, right, splitIndex, splitValue):
@@ -158,8 +158,8 @@ class RandomForest:
         predictions = []
         
         for tree in self.forest:
-            predictions.append(tree.predict(row))        
-        
+            predictions.append(tree.predict(row))
+                    
         data = Counter(predictions)
         return data.most_common(1)[0][0] 
 
