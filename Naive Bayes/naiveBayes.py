@@ -126,11 +126,6 @@ class naiveBayes():
         Metoda e cila kthen rezultatin e arritur nga algoritmi.
         Kjo metode kthen klasen ne te cilen takon predikimi te cilin e ben algoritmi
         duke kthyer nje vlere te llogaritur te propabilitetit
-        
-        print("\nRezultati: ")
-        for i in self.propabilitetiAtributeve:
-            print(i, " ==> ", 
-                  "{0:.8f}".format(funct.reduce(lambda x, y: x*y, self.propabilitetiAtributeve[i].values())*self.propabilitetiAtributitKlase[i]))
         """   
         print("\nRezultati: ")
         
