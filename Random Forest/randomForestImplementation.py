@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 nrOfFirstColumn = 2
 nrOfLastColumn = 8
 iterations = 5
-minSize = 500
-maxDepth = 4
+minSize = 20
+maxDepth = 6
 nFeatures = 3
 
 class Node:    
